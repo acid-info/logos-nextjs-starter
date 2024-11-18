@@ -16,10 +16,8 @@ $ yarn install
 
 3. Set .env
 
-- Get Github Personal Access Token at [https://github.com/settings/tokens/new?scopes=repo](https://github.com/settings/tokens/new?scopes=repo)
-
 ```
-NEXT_PUBLIC_SITE_URL=
+NEXT_PUBLIC_API_URL=
 ```
 
 4. Start the development server:
