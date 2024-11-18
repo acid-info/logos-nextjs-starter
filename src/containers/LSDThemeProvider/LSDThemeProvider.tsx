@@ -1,7 +1,7 @@
 import { ThemeProvider, ThemeProviderProps } from '@acid-info/lsd-react'
 import { Global } from '@emotion/react'
 import React, { useEffect } from 'react'
-import useThemeState from '../../states/themeState/theme.state'
+import { useThemeState } from '../../states/themeState/theme.state' // Using Jotai's useThemeState hook
 import { useLSDTheme } from './themes'
 
 export type LSDThemeProviderProps = Partial<ThemeProviderProps>
@@ -15,9 +15,9 @@ export const LSDThemeProvider: React.FC<LSDThemeProviderProps> = ({
 
   useEffect(() => {
     const html = document.querySelector('html') as HTMLElement
-    html.setAttribute('data-theme', mode.value)
-    html.setAttribute('data-font-family', genericFontFamily.value)
-  }, [mode.value, genericFontFamily.value])
+    html.setAttribute('data-theme', mode) // Removed `.value` since Jotai provides direct values
+    html.setAttribute('data-font-family', genericFontFamily) // Removed `.value`
+  }, [mode, genericFontFamily]) // Removed `.value` in dependencies
 
   return (
     <ThemeProvider theme={theme.current} injectCssVars={false}>

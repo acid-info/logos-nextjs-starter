@@ -1,35 +1,71 @@
 import { TypographyGenericFontFamily } from '@acid-info/lsd-react'
-import { hookstate, State, useHookstate } from '@hookstate/core'
-import { localstored } from '@hookstate/localstored'
+import { atom, useAtom } from 'jotai'
 
 export type ThemeState = {
   mode: 'light' | 'dark'
-  genericFontFamily: TypographyGenericFontFamily
+  genericFontFamily: TypographyGenericFontFamily | 'Inter'
 }
 
 export const defaultThemeState: ThemeState = {
   mode: 'light',
-  genericFontFamily: 'serif',
+  genericFontFamily: 'Inter',
 }
 
-const themeState =
-  typeof window === 'undefined'
-    ? hookstate(defaultThemeState)
-    : hookstate<ThemeState>(defaultThemeState, localstored({ key: 'theme' }))
-
-const wrapThemeState = (state: State<ThemeState>) => ({
-  mode: state.mode,
-  genericFontFamily: state.genericFontFamily,
-  get: () => state.value,
-  setMode: (value: ThemeState['mode']) => state.mode.set(value),
-  setGenericFontFamily: (value: ThemeState['genericFontFamily']) =>
-    state.genericFontFamily.set('serif'),
-  toggleMode: () =>
-    state.mode.set(state.mode.get() === 'dark' ? 'light' : 'dark'),
+const themeAtom = atom<ThemeState>(() => {
+  if (typeof window !== 'undefined') {
+    const storedTheme = localStorage.getItem('theme')
+    return storedTheme ? JSON.parse(storedTheme) : defaultThemeState
+  }
+  return defaultThemeState
 })
 
-export const useThemeState = () => wrapThemeState(useHookstate(themeState))
+const persistentThemeAtom = atom(
+  (get) => get(themeAtom),
+  (get, set, newTheme: ThemeState) => {
+    set(JSON.parse(JSON.stringify(newTheme)))
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('theme', JSON.stringify(newTheme))
+    }
+  },
+)
 
-export const useIsDarkTheme = () => useThemeState().mode.get() === 'dark'
+export const useThemeState = () => {
+  const [theme, setTheme] = useAtom(persistentThemeAtom)
+
+  const setMode = (mode: ThemeState['mode']) => {
+    setTheme({
+      ...theme,
+      mode,
+    })
+  }
+
+  const setGenericFontFamily = (
+    fontFamily: ThemeState['genericFontFamily'],
+  ) => {
+    setTheme({
+      ...theme,
+      genericFontFamily: fontFamily,
+    })
+  }
+
+  const toggleMode = () => {
+    setTheme({
+      ...theme,
+      mode: theme.mode === 'dark' ? 'light' : 'dark',
+    })
+  }
+
+  return {
+    ...theme,
+    setMode,
+    setGenericFontFamily,
+    toggleMode,
+  }
+}
+
+export const useIsDarkTheme = () => {
+  const theme = useThemeState()
+  return theme.mode === 'dark'
+}
 
 export default useThemeState
