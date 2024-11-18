@@ -1,5 +1,4 @@
 import { ImageResponse } from '@vercel/og'
-import { handleMethodNotAllowedResponse } from 'next/dist/server/future/route-modules/helpers/response-handlers'
 import { NextRequest } from 'next/server'
 
 export const config = {
@@ -98,4 +97,3 @@ export default async function handler(request: NextRequest) {
     },
   )
 }
-handleMethodNotAllowedResponse()
