@@ -1,71 +1,55 @@
 import { TypographyGenericFontFamily } from '@acid-info/lsd-react'
-import { atom, useAtom } from 'jotai'
+import { useAtom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
+
+export enum ThemeMode {
+  LIGHT = 'light',
+  DARK = 'dark',
+}
 
 export type ThemeState = {
-  mode: 'light' | 'dark'
+  mode: ThemeMode
   genericFontFamily: TypographyGenericFontFamily | 'Inter'
 }
 
 export const defaultThemeState: ThemeState = {
-  mode: 'light',
+  mode: ThemeMode.LIGHT,
   genericFontFamily: 'Inter',
 }
 
-const themeAtom = atom<ThemeState>(() => {
-  if (typeof window !== 'undefined') {
-    const storedTheme = localStorage.getItem('theme')
-    return storedTheme ? JSON.parse(storedTheme) : defaultThemeState
-  }
-  return defaultThemeState
+const themeAtom = atomWithStorage<ThemeState>('theme', defaultThemeState)
+
+const wrapThemeState = (
+  theme: ThemeState,
+  setTheme: (value: ThemeState) => void,
+) => ({
+  theme,
+  get: () => theme,
+  getMode: () => theme.mode,
+  getGenericFontFamily: () => theme.genericFontFamily,
+  setTheme: (value: ThemeState) => {
+    setTheme(value)
+  },
+  setMode: (mode: ThemeState['mode']) => {
+    const newTheme = { ...theme, mode }
+    setTheme(newTheme)
+  },
+  toggleMode: () => {
+    const newMode: ThemeState['mode'] =
+      theme.mode === ThemeMode.DARK ? ThemeMode.LIGHT : ThemeMode.DARK
+    const newTheme = { ...theme, mode: newMode }
+    setTheme(newTheme)
+  },
 })
 
-const persistentThemeAtom = atom(
-  (get) => get(themeAtom),
-  (get, set, newTheme: ThemeState) => {
-    set(JSON.parse(JSON.stringify(newTheme)))
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('theme', JSON.stringify(newTheme))
-    }
-  },
-)
-
 export const useThemeState = () => {
-  const [theme, setTheme] = useAtom(persistentThemeAtom)
-
-  const setMode = (mode: ThemeState['mode']) => {
-    setTheme({
-      ...theme,
-      mode,
-    })
-  }
-
-  const setGenericFontFamily = (
-    fontFamily: ThemeState['genericFontFamily'],
-  ) => {
-    setTheme({
-      ...theme,
-      genericFontFamily: fontFamily,
-    })
-  }
-
-  const toggleMode = () => {
-    setTheme({
-      ...theme,
-      mode: theme.mode === 'dark' ? 'light' : 'dark',
-    })
-  }
-
-  return {
-    ...theme,
-    setMode,
-    setGenericFontFamily,
-    toggleMode,
-  }
+  const [theme, setTheme] = useAtom(themeAtom)
+  return wrapThemeState(theme, setTheme)
 }
 
 export const useIsDarkTheme = () => {
-  const theme = useThemeState()
-  return theme.mode === 'dark'
+  const themeState = useThemeState()
+  return themeState.getMode() === ThemeMode.DARK
 }
 
 export default useThemeState

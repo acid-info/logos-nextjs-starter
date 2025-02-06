@@ -33,45 +33,43 @@ const useThemeCssVars = (theme: Theme, colorMode: string) =>
   )
 
 export const useLSDTheme = () => {
-  const { genericFontFamily, mode } = useThemeState()
+  const { getGenericFontFamily, getMode } = useThemeState()
 
   const themes = useMemo(() => {
-    const options: CreateThemeProps = {
+    const baseOptions: CreateThemeProps = {
       breakpoints: {
-        sm: {
-          width: 768,
-        },
-        md: {
-          width: 1024,
-        },
-        lg: {
-          width: 1280,
-        },
-        xl: {
-          width: 1440,
-        },
-      },
-      palette: {
-        primary: '20, 0, 255',
-        secondary: '255, 255, 255',
+        sm: { width: 768 },
+        md: { width: 1024 },
+        lg: { width: 1280 },
+        xl: { width: 1440 },
       },
       spacing: [],
+      palette: {},
       typography: {},
       typographyGlobal: {
-        genericFontFamily: genericFontFamily as any,
+        genericFontFamily: getGenericFontFamily() as any,
       },
     }
 
     return {
-      light: createTheme(options, baseThemes.light),
-      dark: createTheme(options, baseThemes.dark),
+      light: createTheme(
+        {
+          ...baseOptions,
+          palette: {
+            primary: '20, 0, 255',
+            secondary: '255, 255, 255',
+          },
+        },
+        baseThemes.light,
+      ),
+      dark: createTheme(baseOptions, baseThemes.dark),
     }
-  }, [genericFontFamily])
+  }, [getGenericFontFamily])
 
   return {
     dark: themes.dark,
     light: themes.light,
-    current: themes[mode],
+    current: themes[getMode()],
     lightCssVars: useThemeCssVars(themes.light, 'light'),
     darkCssVars: useThemeCssVars(themes.dark, 'dark'),
   }
