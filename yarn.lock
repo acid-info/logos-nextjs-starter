@@ -4144,11 +4144,6 @@ react-markdown@^9.0.1:
     unist-util-visit "^5.0.0"
     vfile "^6.0.0"
 
-react-photo-album@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/react-photo-album/-/react-photo-album-2.3.1.tgz#f597f1d16d13f386b25c135d1f9b9d1895d2c94c"
-  integrity sha512-c7ofDx2DAbQa9AW9wUWOBX9zUKf/QjvdQK+fPNKEiKprks/n8t4c2viyBZ6EWpQLFLU0ad3yVBTgFvxEZ46/Iw==
-
 react-universal-interface@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/react-universal-interface/-/react-universal-interface-0.6.2.tgz#5e8d438a01729a4dbbcbeeceb0b86be146fe2b3b"
