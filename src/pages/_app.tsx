@@ -70,6 +70,18 @@ export default function App({ Component, pageProps }: AppLayoutProps) {
             padding: 0;
             word-break: keep-all;
           }
+
+          [data-theme='light'] {
+            .light-mode-hidden {
+              display: none !important;
+            }
+          }
+
+          [data-theme='dark'] {
+            .dark-mode-hidden {
+              display: none !important;
+            }
+          }
         `}
       />
       {getLayout(<Component {...pageProps} />)}
