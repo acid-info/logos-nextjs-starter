@@ -34,14 +34,10 @@ export default function App({ Component, pageProps }: AppLayoutProps) {
       </Head>
       <Global
         styles={css`
-          :root {
-            --lsd-text-secondary: 255, 255, 255;
-          }
-
           html,
           body {
-            background: white;
-            color: black;
+            background: rgb(var(--lsd-surface-primary));
+            color: rgb(var(--lsd-text-primary));
             margin: 0;
             width: 100%;
             height: 100%;
@@ -60,7 +56,7 @@ export default function App({ Component, pageProps }: AppLayoutProps) {
           a:hover,
           a:active,
           a:focus {
-            color: black;
+            color: rgb(var(--lsd-text-primary));
           }
 
           h1,
