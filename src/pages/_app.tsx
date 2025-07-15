@@ -5,7 +5,7 @@ import { css, Global } from '@emotion/react'
 import { NextComponentType, NextPageContext } from 'next'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 
 type NextLayoutComponentType<P = {}> = NextComponentType<
   NextPageContext,
@@ -24,6 +24,20 @@ export default function App({ Component, pageProps }: AppLayoutProps) {
     Component.getLayout ||
     ((page: ReactNode) => <DefaultLayout>{page}</DefaultLayout>)
 
+  useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem('theme')
+      if (savedTheme) {
+        const themeData = JSON.parse(savedTheme)
+        if (themeData.mode) {
+          document.documentElement.setAttribute('data-theme', themeData.mode)
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load theme from localStorage:', error)
+    }
+  }, [])
+
   return (
     <>
       <Head>
@@ -35,6 +49,26 @@ export default function App({ Component, pageProps }: AppLayoutProps) {
         <style
           id="lsd-theme-styles"
           dangerouslySetInnerHTML={{ __html: generateLsdVars() }}
+        />
+        {/* Prevent theme flash by setting theme before hydration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var savedTheme = localStorage.getItem('theme');
+                  if (savedTheme) {
+                    var themeData = JSON.parse(savedTheme);
+                    if (themeData.mode) {
+                      document.documentElement.setAttribute('data-theme', themeData.mode);
+                    }
+                  }
+                } catch (e) {
+                  console.error('Failed to load theme from localStorage:', e);
+                }
+              })();
+            `,
+          }}
         />
       </Head>
       <Global

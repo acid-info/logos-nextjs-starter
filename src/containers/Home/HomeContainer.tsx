@@ -26,6 +26,11 @@ export const HomeContainer: React.FC<HomePageProps> = ({
 }
 
 const Container = styled.div`
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 300px;
   @media (max-width: ${breakpoints.lg}px) {
     margin-inline: 10px;
   }

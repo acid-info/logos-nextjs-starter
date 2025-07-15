@@ -32,12 +32,14 @@ const wrapThemeState = (
   },
   setMode: (mode: ThemeState['mode']) => {
     const newTheme = { ...theme, mode }
+    document.documentElement.setAttribute('data-theme', mode)
     setTheme(newTheme)
   },
   toggleMode: () => {
     const newMode: ThemeState['mode'] =
       theme.mode === ThemeMode.DARK ? ThemeMode.LIGHT : ThemeMode.DARK
     const newTheme = { ...theme, mode: newMode }
+    document.documentElement.setAttribute('data-theme', newMode)
     setTheme(newTheme)
   },
 })
