@@ -1,4 +1,4 @@
-import { TypographyGenericFontFamily } from '@acid-info/lsd-react'
+import { TypographyGenericFontFamily } from '@acid-info/lsd-react/theme'
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 

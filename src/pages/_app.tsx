@@ -1,10 +1,11 @@
 import { DefaultLayout } from '@/layouts/DefaultLayout'
+import '@acid-info/lsd-react/css'
+import { generateLsdVars } from '@acid-info/lsd-react/theme'
 import { css, Global } from '@emotion/react'
 import { NextComponentType, NextPageContext } from 'next'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { ReactNode } from 'react'
-import { LSDThemeProvider } from '../containers/LSDThemeProvider'
 
 type NextLayoutComponentType<P = {}> = NextComponentType<
   NextPageContext,
@@ -24,12 +25,16 @@ export default function App({ Component, pageProps }: AppLayoutProps) {
     ((page: ReactNode) => <DefaultLayout>{page}</DefaultLayout>)
 
   return (
-    <LSDThemeProvider>
+    <>
       <Head>
         <title>Logos NextJS Starter</title>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+        />
+        <style
+          id="lsd-theme-styles"
+          dangerouslySetInnerHTML={{ __html: generateLsdVars() }}
         />
       </Head>
       <Global
@@ -85,6 +90,6 @@ export default function App({ Component, pageProps }: AppLayoutProps) {
         `}
       />
       {getLayout(<Component {...pageProps} />)}
-    </LSDThemeProvider>
+    </>
   )
 }

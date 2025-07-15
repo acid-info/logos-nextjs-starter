@@ -22,7 +22,7 @@
     }
   },
   "dependencies": {
-    "@acid-info/lsd-react": "^0.1.0-beta.3",
+    "@acid-info/lsd-react": "^0.2.0-topic-refactor-lsd-1.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mdx-js/loader": "^2.3.0",
@@ -34,8 +34,8 @@
     "jotai": "^2.10.2",
     "next": "^15.1.6",
     "next-mdx-remote": "^4.4.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-markdown": "^9.0.1",
     "rehype-raw": "^7.0.0",
     "remark-breaks": "^4.0.0",
